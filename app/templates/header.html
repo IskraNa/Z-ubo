@@ -1,0 +1,79 @@
+{% load cart_tags %}
+<div class="container-fluid p-0" style="background-image: url('https://wallpaperaccess.com/full/2357260.jpg');
+background-repeat: no-repeat; background-size: cover; background-position: center; height: 444px; width: 100%;">
+    <div class="container-fluid bg-dark p-0" style="height: 5px"></div>
+    <nav class="navbar navbar-expand-lg p-0">
+        <div class="container-fluid">
+            <a class="navbar-brand" href="/"><img
+                    src="https://www.coolgenerator.com/Data/Textdesign/202308/2872a228fd80305cb0f028c0ca7e6932.png"
+                    width="200px"></a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse"
+                    data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent"
+                    aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse mt-2" id="navbarSupportedContent">
+                <ul class="navbar-nav ms-auto ms-5 mb-5 mb-lg-0 column-gap-4">
+                    <li>
+                        <form class="d-flex pt-2" role="search">
+                            <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search">
+                            <button class="btn btn-outline-success" type="submit">Search</button>
+                        </form>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/login"><img
+                                src="https://www.freeiconspng.com/uploads/account-profile-user-icon--icon-search-engine-10.png"
+                                width="40px" height="40px"></a>
+                    </li>
+                    {% if user.is_superuser %}
+                    <li class="nav-item fs-3 fs-md-1 fs-sm-3 fs-xl-1 fs-lg-1">
+                        <a class="nav-link text-light pt-1" href="{% url 'orders' %}">ORDERS</a>
+                    </li>
+                    {% endif %}
+                    <li class="nav-item fs-3 fs-md-1 fs-sm-3 fs-xl-1 fs-lg-1">
+                        <a class="nav-link active text-light pt-1" aria-current="page" href="/">HOME</a>
+                    </li>
+                    <li class="nav-item fs-3 fs-md-1 fs-lg-1">
+                        <a class="nav-link text-light pt-1" href="/products">PRODUCTS</a>
+                    </li>
+                    <li class="nav-item ">
+                        <a class="nav-link fs-3 fs-md-1 fs-lg-1 text-light pt-1" href="/contact">CONTACT</a>
+                    </li>
+                    {% if user.is_authenticated %}
+                    <li class="nav-item mb-2 me-2">
+                        <a class="nav-link position-relative" href="{% url 'cart' %}">
+                            <img src="https://www.freeiconspng.com/uploads/shopping-cart-icon-2.png" width="40px"
+                                 height="40px"><i class="fas fa-shopping-cart"></i>
+                            <span class="badge badge-pill position-absolute left-0 bottom-0 translate-middle rounded-pill bg-danger">{% cart_item_count request.user %}</span></a>
+                    </li>
+                    {% else %}
+                    <li></li>
+                    {% endif %}
+                </ul>
+            </div>
+        </div>
+    </nav>
+</div>
+
+<script>
+function updateCartCount() {
+    $.ajax({
+        type: 'GET',
+        url: '/get_cart_count/',  // URL to your view that returns the cart count
+        success: function(data) {
+            $('.badge.cart-count').text(data.cart_count);
+        },
+        error: function() {
+            console.log('Error updating cart count.');
+        }
+    });
+}
+
+// Example: Update the cart count when an item is added to the cart
+$('.add-to-cart-btn').on('click', function() {
+    // Add the item to the cart (your code here)
+    updateCartCount();
+});
+
+</script>
+<!-- 'https://besthqwallpapers.com/Uploads/25-8-2019/102850/thumb2-gifts-boxes-romantic-gifts-red-silk-bows-red-background-dark-red-silk-ribbon.jpg'); -->

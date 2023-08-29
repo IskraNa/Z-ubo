@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/css/bootstrap.min.css" rel="stylesheet"
+          integrity="sha384-4bw+/aepP/YC94hEpVNVgiZdgIC5+VKNBQNGCHeKRQN+PtmoHDEXuppvnDJzQIu9" crossorigin="anonymous">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/js/bootstrap.bundle.min.js"
+            integrity="sha384-HwwvtgBNo3bZJJLYd8oVXjrBZt8cqVSpeBNS5n7C8IVInixGAoxmnlMuBnhbgrkm"
+            crossorigin="anonymous"></script>
+    <title>Z'ubo</title>
+</head>
+<body>
+{% include 'header.html' %}
+<div class="container mx-4 my-4 px-4 py-4 mx-xl-4 my-xl-4 mx-md-3 my-md-3">
+    <div class="col-12 p-0">
+         {% if cart_items %}
+        <div class="row text-center">
+            <div class="col-2"></div>
+            <div class="col-3 fs-5">Product</div>
+            <div class="col-2 offset-1 fs-5">Price</div>
+            <div class="col-2 fs-5 pe-3 ps-0">Quantity</div>
+            <div class="col-2 fs-5">Subtotal</div>
+        </div>
+        <form method="POST" action="{% url 'update_cart' %}">
+            {% csrf_token %}
+            {% for item in cart_items %}
+            <div class="row border-top border-bottom text-center p-3 align-items-center">
+                <div class="col-2 p-0"><a class="text-dark text-decoration-none"
+                                          href="{% url 'remove_from_cart' product_id=item.product.id %}">Remove
+                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" class="bi bi-x"
+                         viewBox="0 0 16 16">
+                        <path d="M4.646 4.646a.5.5 0 0 1 .708 0L8 7.293l2.646-2.647a.5.5 0 0 1 .708.708L8.707 8l2.647 2.646a.5.5 0 0 1-.708.708L8 8.707l-2.646 2.647a.5.5 0 0 1-.708-.708L7.293 8 4.646 5.354a.5.5 0 0 1 0-.708z"/>
+                    </svg>
+                </a>
+                    <img src="{{ item.product.image.url }}" width="100" height="100">
+                </div>
+                <div class="col-3 fs-5">{{ item.product.name }}</div>
+                <div class="col-2 offset-1 fs-5">{{ item.product.price }} den</div>
+                <input type="number" name="quantity_{{ item.product.id }}" class="d-none" value="{{ item.quantity }}">
+                <div class="col-2 fs-5 p-0">
+                    <input type="number" name="quantity_{{ item.product.id }}" class="w-50 text-center"
+                           value="{{ item.quantity }}">
+                </div>
+                <div class="col-2 fs-5" style="color: #812227">{{ item.subtotal|floatformat:2 }}</div>
+            </div>
+            {% endfor %}
+            <button type="submit" class="btn btn-large text-dark fs-4 px-md-3 px-xl-4 rounded-pill mt-5 mb-5 me-2 offset-10"
+                    style="background: #DDAA84">Update cart
+            </button>
+        </form>
+        <div class="row mt-5">
+            <div class="col-4 align-content-center">
+                <a class="text-dark text-decoration-none fs-4" href="{% url 'products' %}">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor"
+                         class="bi bi-arrow-left-circle-fill mb-1" viewBox="0 0 16 16">
+                        <path d="M8 0a8 8 0 1 0 0 16A8 8 0 0 0 8 0zm3.5 7.5a.5.5 0 0 1 0 1H5.707l2.147 2.146a.5.5 0 0 1-.708.708l-3-3a.5.5 0 0 1 0-.708l3-3a.5.5 0 1 1 .708.708L5.707 7.5H11.5z"/>
+                    </svg>
+                    Go back to the shop
+                </a>
+            </div>
+            <div class="col-3 offset-5 justify-content-center pe-1">
+                <a href="{% url 'checkout' %}" class="btn btn-large text-dark fs-4 px-md-2 px-xl-4 rounded-pill"
+           style="background: #36A558">Proceed to checkout</a>
+            </div>
+        </div>
+        {% else %}
+        <p class="fs-3">Your cart is empty.</p>
+        <div class="row mt-5">
+            <div class="col-4 align-content-center">
+                <a class="text-dark text-decoration-none fs-4" href="{% url 'products' %}">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor"
+                         class="bi bi-arrow-left-circle-fill mb-1" viewBox="0 0 16 16">
+                        <path d="M8 0a8 8 0 1 0 0 16A8 8 0 0 0 8 0zm3.5 7.5a.5.5 0 0 1 0 1H5.707l2.147 2.146a.5.5 0 0 1-.708.708l-3-3a.5.5 0 0 1 0-.708l3-3a.5.5 0 1 1 .708.708L5.707 7.5H11.5z"/>
+                    </svg>
+                    Go back to the shop
+                </a>
+            </div>
+        </div>
+        {% endif %}
+    </div>
+</div>
+{% include 'footer.html' %}
+</body>
+</html>
